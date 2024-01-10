@@ -123,7 +123,7 @@ class RemoteHosts:
     @property
     def raw_hosts(self) -> str:
         if not self._raw_hosts or self._fresh is True:
-            _, out, _ = self.ssh_client.exec_command("cat /etc/hosts")
+            _, out, _ = self.ssh_client.exec_command("cat /etc/hosts | grep -v ^# | grep -v ^$")
             raw_hosts = out.read().decode('utf-8')
             self._raw_hosts = raw_hosts
             self._fresh = False
@@ -150,36 +150,3 @@ class RemoteHosts:
 
     def __repr__(self) -> str:
         return str(self)
-
-
-if __name__ == "__main__":
-    # test raw hosts
-    ins = RemoteHosts(ip="10.129.25.181", username="root", password="xxx")
-    # print(ins.raw_hosts)
-
-    # test get ip_domains
-    # print(dict(ins.ip_domains))
-
-    # test get domain_ips
-    # print(dict(ins.domain_ip))
-
-    # test query domain
-    # print(ins.query_domains_by_ip("10.129.25.22"))
-
-    # test query ip
-    # print(ins.query_ip_by_domain("hybrid02"))
-
-    # test add item
-    # print(ins.add_item("192.168.10.1", ["dnsA", "dnsB"]))
-    # print(dict(ins.domain_ip))
-    # print(dict(ins.ip_domains))
-
-    # test delete item by ip
-    # ins.delte_item_by_ip("192.168.10.1")
-    # print(dict(ins.domain_ip))
-    # print(dict(ins.ip_domains))
-
-    # test delte item by domain
-    # ins.delete_item_by_domain("dnsB")
-    # print(dict(ins.domain_ip))
-    # print(dict(ins.ip_domains))
