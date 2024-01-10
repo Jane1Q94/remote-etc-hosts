@@ -5,6 +5,8 @@ Sure, It's very very simple but useful for someone need it. I just want to learn
 
 You can do these things if you install it.
 
+## API
+
 1. get total view of /etc/hosts
 
 ```python
@@ -49,6 +51,8 @@ ins.delete_item_by_domain("dnsB")
 print(dict(ins.domain_ip))
 print(dict(ins.ip_domains))
 ```
+
+## CLIs
 
 we also offer you some CLIs as same as api mentioned above:
 
