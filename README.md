@@ -50,6 +50,43 @@ print(dict(ins.domain_ip))
 print(dict(ins.ip_domains))
 ```
 
-we also offer you some CLIs, such as:
+we also offer you some CLIs as same as api mentioned above:
+
+1. get total view of /etc/hosts
+
+```bash
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root ip_domains
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root domain_ip
+```
+
+2. query domain by ip
+
+```bash
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root query_domain_by_ip 127.0.0.1
+```
+
+3. query ip by domain
+
+```bash
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root query_ip_by_domain dnsA
+```
+
+4. add a new item to `/etc/hosts`
+
+```bash
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root add_item 192.168.0.2 '[dnsA, dnsB]'
+```
+
+5. del item by ip
+
+```bash
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root delete_item_by_ip 192.168.0.2
+```
+
+6. del item by domain
+
+```bash
+remote_etc_hosts --ip 192.168.0.1 --password xxx --username root delete_item_by_domain dnsA
+```
 
 # install
