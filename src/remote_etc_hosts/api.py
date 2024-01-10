@@ -3,8 +3,8 @@ from collections import defaultdict
 import paramiko
 from paramiko import SSHClient
 
-from remote_hosts.exceptions import ItemNotFound
-from remote_hosts.utils import parse_hosts
+from remote_etc_hosts.exceptions import ItemNotFound
+from remote_etc_hosts.utils import parse_hosts
 
 
 class RemoteHosts:
@@ -74,7 +74,7 @@ class RemoteHosts:
         self._write_to_hosts()
         return self.ip_domains
 
-    def delte_item_by_ip(self, ip: str) -> dict:
+    def delete_item_by_ip(self, ip: str) -> dict:
         if ip not in self.ip_domains.keys():
             raise ItemNotFound(ip)
 

@@ -1,7 +1,7 @@
 import re
 from typing import List
 
-from remote_hosts.exceptions import EmptyHosts
+from remote_etc_hosts.exceptions import EmptyHosts
 
 
 def parse_hosts(raw_hosts: str) -> List[tuple]:
