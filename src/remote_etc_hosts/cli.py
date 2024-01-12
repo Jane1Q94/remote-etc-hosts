@@ -9,9 +9,7 @@ class RemoteHostsCli:
     """parse and operate /etc/hosts in remote host."""
 
     def __init__(self, ip: str, password: str, username: str = "root") -> None:
-        self.__remote_hosts_ins = RemoteHosts(
-            ip=ip, username=username, password=password
-        )
+        self.__remote_hosts_ins = RemoteHosts(ip=ip, username=username, password=password)
 
     @staticmethod
     def __print_ip_domains(data: dict):
@@ -29,11 +27,7 @@ class RemoteHostsCli:
 
     def query_domains_by_ip(self, q_ip: str):
         """query domains by ip you offer"""
-        print(
-            json.dumps(
-                list(self.__remote_hosts_ins.query_domains_by_ip(q_ip)), indent=4
-            )
-        )
+        print(json.dumps(list(self.__remote_hosts_ins.query_domains_by_ip(q_ip)), indent=4))
 
     def query_ip_by_domain(self, q_domain: str):
         """query ip by domain you offer"""

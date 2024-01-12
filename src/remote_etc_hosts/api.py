@@ -127,9 +127,7 @@ class RemoteHosts:
     @property
     def raw_hosts(self) -> str:
         if not self._raw_hosts or self._fresh is True:
-            _, out, _ = self.ssh_client.exec_command(
-                "cat /etc/hosts | grep -v ^# | grep -v ^$"
-            )
+            _, out, _ = self.ssh_client.exec_command("cat /etc/hosts | grep -v ^# | grep -v ^$")
             raw_hosts = out.read().decode("utf-8")
             self._raw_hosts = raw_hosts
             self._fresh = False
