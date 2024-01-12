@@ -12,7 +12,7 @@ def test_parse_hosts():
     handle_hosts = parse_hosts(raw_hosts)
     assert handle_hosts == [
         ("127.0.0.1", ["localhost", "localhost4"]),
-        ("255.255.255.255", ["broadcasthost"])
+        ("255.255.255.255", ["broadcasthost"]),
     ]
 
 

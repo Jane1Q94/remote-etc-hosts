@@ -1,6 +1,6 @@
 class EmptyHosts(Exception):
     def __str__(self) -> str:
-        return 'non content found in `/etc/hosts`'
+        return "non content found in `/etc/hosts`"
 
 
 class ItemNotFound(Exception):

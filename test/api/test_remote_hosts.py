@@ -42,7 +42,9 @@ def test_add_item(mock_write_to_hosts, mock_raw_hosts):
     assert ins.query_ip_by_domain("dnsC") == "10.0.0.2"
 
 
-@patch.object(RemoteHosts, "raw_hosts", return_value="192.168.0.1 dnsA\n192.168.0.2 dnsB")
+@patch.object(
+    RemoteHosts, "raw_hosts", return_value="192.168.0.1 dnsA\n192.168.0.2 dnsB"
+)
 @patch.object(RemoteHosts, "_write_to_hosts", return_value=print)
 def test_delete_item_by_ip(mock_write_to_hosts, mock_raw_hosts):
     ins = RemoteHosts(ip="10.0.0.1", username="root", password="password")
