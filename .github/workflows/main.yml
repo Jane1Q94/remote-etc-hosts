@@ -45,3 +45,19 @@ jobs:
         run: python -m pip install tox
       - name: Run pytest
         run: tox -e ${{ matrix.python-version.toxenv }}
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel
+      - name: run build
+        run: python -m cibuildwheel --output-dir wheels
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./wheels/*.whl
