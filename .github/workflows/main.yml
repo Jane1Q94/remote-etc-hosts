@@ -1,0 +1,86 @@
+name: auto format lint test publish
+on:
+  - push
+jobs:
+  format:
+    name: format code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run black
+        run: tox -e format
+  lint:
+    name: lint code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run flake8
+        run: tox -e lint
+  test:
+    name: unittest
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - version: "3.10"
+            toxenv: "py310"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version.version }}
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run pytest
+        run: tox -e ${{ matrix.python-version.toxenv }}
+  build:
+    name: build source dist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install build
+        run: python -m pip install build
+
+      # multi platform need it
+      # - name: Install cibuildwheel
+      # run: python -m pip install cibuildwheel
+      # - name: run build
+      # run: python -m cibuildwheel --output-dir wheels
+
+      - name: run build
+        run: pyproject-build
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./dist/
+  publish:
+    name: publish package to pypi
+    runs-on: ubuntu-latest
+    needs:
+      - format
+      - lint
+      - test
+      - build
+    if: startsWith(github.event.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

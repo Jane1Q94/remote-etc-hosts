@@ -3,12 +3,11 @@ from collections import defaultdict
 import paramiko
 from paramiko import SSHClient
 
-from remote_hosts.exceptions import ItemNotFound
-from remote_hosts.utils import parse_hosts
+from remote_etc_hosts.exceptions import ItemNotFound
+from remote_etc_hosts.utils import parse_hosts
 
 
 class RemoteHosts:
-
     def __init__(self, ip: str, username: str, password: str) -> None:
         self.ip = ip
         self.username = username
@@ -16,9 +15,9 @@ class RemoteHosts:
         # one ip have multi domains
         self._ip_domains = defaultdict(lambda: set())
         # one domain have one ip
-        self._domain_ip = defaultdict(lambda: '')
+        self._domain_ip = defaultdict(lambda: "")
         self._ssh_client = None
-        self._raw_hosts = ''
+        self._raw_hosts = ""
         self._fresh = False
 
     @property
@@ -74,7 +73,7 @@ class RemoteHosts:
         self._write_to_hosts()
         return self.ip_domains
 
-    def delte_item_by_ip(self, ip: str) -> dict:
+    def delete_item_by_ip(self, ip: str) -> dict:
         if ip not in self.ip_domains.keys():
             raise ItemNotFound(ip)
 
@@ -115,16 +114,21 @@ class RemoteHosts:
             ssh_client = paramiko.SSHClient()
             ssh_client.load_system_host_keys()
             ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh_client.connect(hostname=self.ip, username=self.username,
-                               password=self.password, timeout=10, banner_timeout=30)
+            ssh_client.connect(
+                hostname=self.ip,
+                username=self.username,
+                password=self.password,
+                timeout=10,
+                banner_timeout=30,
+            )
             self._ssh_client = ssh_client
         return self._ssh_client
 
     @property
     def raw_hosts(self) -> str:
         if not self._raw_hosts or self._fresh is True:
-            _, out, _ = self.ssh_client.exec_command("cat /etc/hosts")
-            raw_hosts = out.read().decode('utf-8')
+            _, out, _ = self.ssh_client.exec_command("cat /etc/hosts | grep -v ^# | grep -v ^$")
+            raw_hosts = out.read().decode("utf-8")
             self._raw_hosts = raw_hosts
             self._fresh = False
         return self._raw_hosts
@@ -150,36 +154,3 @@ class RemoteHosts:
 
     def __repr__(self) -> str:
         return str(self)
-
-
-if __name__ == "__main__":
-    # test raw hosts
-    ins = RemoteHosts(ip="10.129.25.181", username="root", password="xxx")
-    # print(ins.raw_hosts)
-
-    # test get ip_domains
-    # print(dict(ins.ip_domains))
-
-    # test get domain_ips
-    # print(dict(ins.domain_ip))
-
-    # test query domain
-    # print(ins.query_domains_by_ip("10.129.25.22"))
-
-    # test query ip
-    # print(ins.query_ip_by_domain("hybrid02"))
-
-    # test add item
-    # print(ins.add_item("192.168.10.1", ["dnsA", "dnsB"]))
-    # print(dict(ins.domain_ip))
-    # print(dict(ins.ip_domains))
-
-    # test delete item by ip
-    # ins.delte_item_by_ip("192.168.10.1")
-    # print(dict(ins.domain_ip))
-    # print(dict(ins.ip_domains))
-
-    # test delte item by domain
-    # ins.delete_item_by_domain("dnsB")
-    # print(dict(ins.domain_ip))
-    # print(dict(ins.ip_domains))
