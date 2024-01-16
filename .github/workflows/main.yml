@@ -61,12 +61,12 @@ jobs:
       # run: python -m cibuildwheel --output-dir wheels
 
       - name: run build
-        run: pyproject-build
+        run: pyproject-build -s
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./dist/
+          path: ./dist/*.tar.gz
   publish:
     name: publish package to pypi
     runs-on: ubuntu-latest
