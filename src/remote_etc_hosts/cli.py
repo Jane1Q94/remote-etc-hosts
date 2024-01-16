@@ -16,8 +16,11 @@ class RemoteHostsCli:
         os_password = os.getenv("REMOTE_HOST_SSH_PASSWORD")
 
         # 2 of 1
-        assert password or os_password, 'You need to provide the password either as a parameter or as an environment variable REMOTE_HOST_SSH_PASSWORD'
-        assert username or os_user, 'You need to provide the username either as a parameter or as an environment variable REMOTE_HOST_SSH_USER'
+        assert password or os_password, \
+            'You need to provide the password either as a parameter or as an environment \
+                variable REMOTE_HOST_SSH_PASSWORD'
+        assert username or os_user, \
+            'You need to provide the username either as a parameter or as an environment variable REMOTE_HOST_SSH_USER'
 
         self.ip = ip
         self.username = username if username else os_user
