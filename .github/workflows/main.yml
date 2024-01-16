@@ -44,7 +44,7 @@ jobs:
       - name: Run pytest
         run: tox -e ${{ matrix.python-version.toxenv }}
   build:
-    name: build
+    name: build source dist
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -61,9 +61,9 @@ jobs:
       # run: python -m cibuildwheel --output-dir wheels
 
       - name: run build
-        run: pyproject-build -s
+        run: pyproject-build
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./dist/*.tar.gz
+          path: ./dist/
