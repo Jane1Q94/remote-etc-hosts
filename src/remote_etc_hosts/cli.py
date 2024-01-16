@@ -1,4 +1,5 @@
 import json
+import os
 
 import fire
 
@@ -8,8 +9,21 @@ from remote_etc_hosts.api import RemoteHosts
 class RemoteHostsCli:
     """parse and operate /etc/hosts in remote host."""
 
-    def __init__(self, ip: str, password: str, username: str = "root") -> None:
-        self.__remote_hosts_ins = RemoteHosts(ip=ip, username=username, password=password)
+    def __init__(self, ip: str, password: str | None = None, username: str | None = None) -> None:
+
+        # get username and password from env
+        os_user = os.getenv("REMOTE_HOST_SSH_USER")
+        os_password = os.getenv("REMOTE_HOST_SSH_PASSWORD")
+
+        # 2 of 1
+        assert password or os_password, 'You need to provide the password either as a parameter or as an environment variable REMOTE_HOST_SSH_PASSWORD'
+        assert username or os_user, 'You need to provide the username either as a parameter or as an environment variable REMOTE_HOST_SSH_USER'
+
+        self.ip = ip
+        self.username = username if username else os_user
+        self.password = password if password else os_password
+
+        self.__remote_hosts_ins = RemoteHosts(ip=self.ip, username=self.username, password=self.password)
 
     @staticmethod
     def __print_ip_domains(data: dict):

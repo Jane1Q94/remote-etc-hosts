@@ -56,6 +56,8 @@ print(dict(ins.ip_domains))
 
 we also offer you some CLIs as same as api mentioned above:
 
+Note: You can ignore the `--password` and `--username` parameter by setting the environment parameter: REMOTE_HOST_SSH_USER and REMOTE_HOST_SSH_PASSWORD
+
 1. get total view of /etc/hosts
 
 ```bash
@@ -94,3 +96,9 @@ remote_etc_hosts --ip 192.168.0.1 --password xxx --username root delete_item_by_
 ```
 
 # install
+
+note: python3.10 or above is needed!
+
+```bash
+pip install remote-etc-hosts
+```
