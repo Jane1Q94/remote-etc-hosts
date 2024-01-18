@@ -1,3 +1,4 @@
+import typing as t
 from collections import defaultdict
 
 import paramiko
@@ -48,21 +49,21 @@ class RemoteHosts:
             self._parse_hosts()
         return self._domain_ip
 
-    def query_domains_by_ip(self, ip: str) -> set | None:
+    def query_domains_by_ip(self, ip: str) -> t.Optional[set]:
         """
         return eg:
         {"dnsA", "dnsB"} or None
         """
         return self.ip_domains.get(ip)
 
-    def query_ip_by_domain(self, domain) -> str | None:
+    def query_ip_by_domain(self, domain) -> t.Optional[str]:
         """
         return eg:
         "10.1.1.1" or None
         """
         return self.domain_ip.get(domain)
 
-    def add_item(self, ip, domains: list | set) -> dict:
+    def add_item(self, ip, domains: t.Union[list, set]) -> dict:
         # add data in self.ip_domains
         self.ip_domains[ip] |= set(domains)
 
