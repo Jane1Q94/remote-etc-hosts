@@ -1,5 +1,6 @@
 import json
 import os
+import typing as t
 
 import fire
 
@@ -9,7 +10,7 @@ from remote_etc_hosts.api import RemoteHosts
 class RemoteHostsCli:
     """parse and operate /etc/hosts in remote host."""
 
-    def __init__(self, ip: str, password: str | None = None, username: str | None = None) -> None:
+    def __init__(self, ip: str, password: t.Optional[str] = None, username: t.Optional[str] = None) -> None:
 
         # get username and password from env
         os_user = os.getenv("REMOTE_HOST_SSH_USER")
@@ -50,7 +51,7 @@ class RemoteHostsCli:
         """query ip by domain you offer"""
         print(self.__remote_hosts_ins.query_ip_by_domain(q_domain))
 
-    def add_item(self, n_ip: str, n_domains: list | set):
+    def add_item(self, n_ip: str, n_domains: t.Union[set, list]):
         """add new item to /etc/hosts"""
         data = self.__remote_hosts_ins.add_item(n_ip, n_domains)
         self.__print_ip_domains(data)
